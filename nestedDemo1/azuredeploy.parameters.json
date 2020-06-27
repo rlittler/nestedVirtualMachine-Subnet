@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetResourceGroup": {
+      "value": "testsql001_group"
+    },
+    "vnetSubscriptionId": {
+      "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
+    },
+    "existingVnetName": {
+      "value": "testsql001_group-vnet"
+    },
+    "newSubnetName": {
+      "value": "workloads001"
+    },
+    "resourceLocation": {
+      "value": "West Europe"
+    },
+    "subnet1Prefix": {
+      "value": "10.0.1.0/24"
+    },
+    "vmResourceGroup": {
+      "value": "IaaSResources"
+    },
+    "vmSubscriptionId": {
+      "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
+    },
+    "vmNicName": {
+      "value": "nic"
+    },
+    "storageAccountName": {
+      "value": "sfhdof24124931"
+    },
+    "storageAccountResourceGroup": {
+      "value": "IaaSResources"
+    },
+    "storageAccountSubscriptionId": {
+      "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
+    },
+    "virtualMachineName": {
+      "value": "vm001"
+    },
+    "diagnosticsStorageAccount": {
+      "value": "fjweuy82714"
+    },
+    "localAdminPassword": {
+      "value": "RhysLittler999***"
+    },
+    "nicResourceGroup": {
+      "value": "IaaSResources"
+    },
+    "nicSubscriptionId": {
+      "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
+    }
+  }
+}
