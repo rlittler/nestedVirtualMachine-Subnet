@@ -616,8 +616,8 @@
         "createStorageAccount",
         "createNIC"
       ],
-      "resourceGroup": "[parameters('vmResourceGroup')]",
-      "subscriptionId": "[parameters('vmSubscriptionID')]",
+      "resourceGroup": "[parameters('storageAccountResourceGroup')]",
+      "subscriptionId": "[parameters('storageAccountSubscriptionID')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -650,9 +650,9 @@
 
 
                       
-                       // "id": "[resourceId(parameters('nicSubscriptionId'), parameters('nicResourceGroup'), 'Microsoft.Network/networkInterfaces', parameters('vmNicName'))]",
+                        "id": "[resourceId(parameters('vmSubscriptionId'), parameters('vmResourceGroup'), 'Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
 
-                        "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]",
+                       // "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]",
                         
                         "MetricAggregation": [
                           {
@@ -919,8 +919,8 @@
                   }
                 },
                 "protectedSettings": {
-                  "storageAccountName": "[parameters('diagnosticsStorageAccount')]",
-                  "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('diagnosticsstorageAccount')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
+                  "storageAccountName": "[parameters('storageAccountName')]",
+                  "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
                   "storageAccountEndPoint": "https://core.windows.net/"
                 }
               }
