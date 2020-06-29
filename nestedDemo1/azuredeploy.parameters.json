@@ -41,9 +41,7 @@
     "virtualMachineName": {
       "value": "vm001"
     },
-    "diagnosticsStorageAccount": {
-      "value": "fjweuy82714"
-    },
+
     "localAdminPassword": {
       "value": "RhysLittler999***"
     },
