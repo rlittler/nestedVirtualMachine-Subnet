@@ -383,13 +383,6 @@
       }
     },
 
-    "diagnosticsStorageAccount": {
-      "type": "string",
-      "defaultValue": "REPLACE ME",
-      "metadata": {
-        "description": "Specify an existing Storage Account for Guest Level Monitoring."
-      }
-    },
 
     // -------------------------------------------------------------------
     "resourceLocation": {
@@ -660,6 +653,7 @@
                        // "id": "[resourceId(parameters('nicSubscriptionId'), parameters('nicResourceGroup'), 'Microsoft.Network/networkInterfaces', parameters('vmNicName'))]",
 
                         "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]",
+                        
                         "MetricAggregation": [
                           {
                             "scheduledTransferPeriod": "PT1H"
