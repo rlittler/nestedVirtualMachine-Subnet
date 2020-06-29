@@ -642,14 +642,14 @@
                 "typeHandlerVersion": "1.5",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                  "StorageAccount": "[parameters('diagnosticsStorageAccount')]",
+                  "StorageAccount": "[parameters('storageAccountName')]",
                   "WadCfg": {
                     "DiagnosticMonitorConfiguration": {
                       "overallQuotaInMB": 5120,
                       "Metrics": {
 
 
-
+                      
                        // "id": "[resourceId(parameters('nicSubscriptionId'), parameters('nicResourceGroup'), 'Microsoft.Network/networkInterfaces', parameters('vmNicName'))]",
 
                         "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]",
