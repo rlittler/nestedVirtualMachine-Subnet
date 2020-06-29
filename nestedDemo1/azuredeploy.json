@@ -612,6 +612,7 @@
       "name": "virtualMachineDiagnostics",
       "dependsOn": [
 
+
         "createVirtualMachine",
         "createStorageAccount",
         "createNIC"
