@@ -643,11 +643,6 @@
               "type": "extensions",
               "location": "[parameters('resourceLocation')]",
               "apiVersion": "2015-06-15",
-              "dependsOn": [
-
-                "[concat('Microsoft.Resources/deployments/','createStorageAccount')]",
-                "[concat('Microsoft.Resources/deployments/','createVirtualMachine')]"
-              ],
               "tags": {
                 "displayName": "AzureDiagnostics"
               },
@@ -668,10 +663,6 @@
                 }
               }
             }
-
-
-
-
           ]
         }
       }
