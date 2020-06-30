@@ -50,6 +50,17 @@
     },
     "nicSubscriptionId": {
       "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
+    },
+
+    "sqlName": {
+      "value": "sqltest24698489"
+    },
+ 
+    "sqlResourceGroup": {
+      "value": "IaaSResources"
+    },
+    "sqlSubscriptionId": {
+      "value": "c405f45d-d750-45a5-8d4d-5c9006d4b2b5"
     }
   }
 }
