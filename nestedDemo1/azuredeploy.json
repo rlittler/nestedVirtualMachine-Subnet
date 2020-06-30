@@ -438,13 +438,10 @@
   },
   "resources": [
 
-
-
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "createSubnetExistingVNet",
-
       "resourceGroup": "[parameters('vnetResourceGroup')]",
       "subscriptionId": "[parameters('vnetSubscriptionID')]",
       "properties": {
@@ -475,12 +472,7 @@
       "apiVersion": "2019-10-01",
       "name": "createNIC",
       "dependsOn": [
-
-
-
         "[concat('Microsoft.Resources/deployments/','createSubnetExistingVnet')]"
-
-        //"createSubnetExistingVnet"
       ],
       "resourceGroup": "[parameters('nicResourceGroup')]",
       "subscriptionId": "[parameters('nicSubscriptionID')]",
@@ -492,9 +484,7 @@
           "parameters": {},
           "variables": {},
           "resources": [
-
             {
-
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-04-01",
               "name": "[parameters('vmNicName')]",
@@ -520,7 +510,7 @@
 
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2019-06-01",
       "name": "createStorageAccount",
       "resourceGroup": "[parameters('storageAccountResourceGroup')]",
       "subscriptionId": "[parameters('storageAccountSubscriptionID')]",
@@ -534,7 +524,7 @@
           "resources": [
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2019-04-01",
+              "apiVersion": "2019-06-01",
               "name": "[parameters('storageAccountName')]",
               "location": "[parameters('resourcelocation')]",
               "sku": {
@@ -543,19 +533,24 @@
               "kind": "StorageV2",
               "properties": {}
             }
-
           ],
-          //"outputs": {
-          //  "storageEndpoint": {
-          //    "type": "string",
-          //    "value": "[reference(parameters('storageAccountName'), '2019-10-01').primaryEndpoints.blob]"
-          //  },
-          //  "storageKey": {
-          //    "type": "string",
-          //    "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
-          //  }
+          "outputs": {
+            "storageEndpoint": {
+              "type": "string",
+              "value": "[reference(parameters('storageAccountName'), '2019-06-01').primaryEndpoints.blob]"
+            },
+            "storageKey": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+            },
 
-          //}
+            "storageAccountResourceId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]" // will this not work?
+            }
+            
+
+          }
         }
       }
     },
@@ -568,12 +563,7 @@
 
         "[concat('Microsoft.Resources/deployments/','createNIC')]",
         "[concat('Microsoft.Resources/deployments/','createStorageAccount')]"
-
-
-        //"createNIC",
-        // "createStorageAccount"
       ],
-
 
       "resourceGroup": "[parameters('vmResourceGroup')]",
       "subscriptionId": "[parameters('vmSubscriptionID')]",
@@ -653,23 +643,14 @@
       "apiVersion": "2019-10-01",
       "name": "vmDiagnostics",
       "dependsOn": [
-
         //"[resourceId(parameters('vmSubscriptionId'), parameters('vmResourceGroup'), 'Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]"
-
-
-
         // "[concat('Microsoft.Compute/virtualMachines/',parameters('virtualMachineName'))]"
-
-        //"[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-
-        "[concat('Microsoft.Resources/deployments/','createVirtualMachine')]",
+       //"[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+        //"[concat('Microsoft.Resources/deployments/','createVirtualMachine')]",
         //"[concat('Microsoft.Resources/deployments/','createStorageAccount')]"
-
-        //"createStorageAccount",
-        //"createVirtualMachine"
-
+        "createStorageAccount", // how it is ref'd in ms docs.
+        "createVirtualMachine"
         // "[parameters('virtualMachineName')]"
-
       ],
       "resourceGroup": "[parameters('vmResourceGroup')]",
       "subscriptionId": "[parameters('vmSubscriptionID')]",
@@ -694,12 +675,19 @@
                 "typeHandlerVersion": "1.5",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                  "StorageAccount": "[resourceId(parameters('storageAccountSubscriptionId'), parameters('storageAccountResourceGroup'), 'Microsof.Storage/storageAccounts', parameters('storageAccountName'))]",
+                  "StorageAccount": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').storageAccountResourceId]",
+                    
+                    
+                  //"[reference('createStorageAccount').outputs.storageAccountResourceId.value]",
+
+                  //"[resourceId(parameters('storageAccountSubscriptionId'), parameters('storageAccountResourceGroup'), 'Microsof.Storage/storageAccounts', parameters('storageAccountName'))]", // wrong here? but nic is like this
+
                   "WadCfg": {
                     "DiagnosticMonitorConfiguration": {
                       "overallQuotaInMB": 5120,
                       "Metrics": {
-                        "resourceId": "[resourceId(parameters('vmSubscriptionId'), parameters('vmResourceGroup'), 'Microsof.Compute/virtualMachines', parameters('virtualMachineName'))]",
+                        "resourceId": "[resourceId(parameters('vmSubscriptionId'), parameters('vmResourceGroup'), 'Microsof.Compute/virtualMachines', parameters('virtualMachineName'))]", // wrong here? pulling resourceId not ref
+
                         "MetricAggregation": [
                           {
                             "scheduledTransferPeriod": "PT1H"
@@ -965,9 +953,16 @@
                   }
                 },
                 "protectedSettings": {
-                  "storageAccountName": "[parameters('storageAccountName')]", 
-                 "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
-                  //"storageAccountKey": "[reference(concat(parameters('storageAccountName'),'createStorageAccount')).outputs.storageKey.value]",
+                  "storageAccountName": "[parameters('storageAccountName')]",
+
+                  //"[resourceId(parameters('storageAccountSubscriptionId'), parameters('storageAccountResourceGroup'), 'Microsof.Storage/storageAccounts', parameters('storageAccountName'))]",
+
+                  // "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
+                  
+                  "storageAccountKey": "[reference(concat(parameters('storageAccountName'),'createStorageAccount')).outputs.storageKey.value]",
+                  
+                  // "id": "[reference('createStorageAccount').outputs.storageKey.value]",
+                  
                   "storageAccountEndPoint": "https://core.windows.net/"
                 }
               }
